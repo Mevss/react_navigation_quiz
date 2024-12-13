@@ -4,7 +4,7 @@
     "slug": "quiz-zadanie",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/newspaper.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "scheme": "quizzadanie",
@@ -13,7 +13,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/newspaper.png",
+        "backgroundImage": "./assets/newspaper.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.quizzadanie"
@@ -27,7 +28,7 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#ffffff",
-          "image": "./assets/splash-icon.png"
+          "image": "./assets/bell.png"
         }
       ],
       "react-native-edge-to-edge"

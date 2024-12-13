@@ -4,11 +4,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Header } from './Header';
 import AsyncStorage from './AsyncStorageUtility';
-import { getAllTasks } from './Tasks'; // Importujemy funkcję z tasks.ts
 
 
 export function Home() {
-  const tasks = getAllTasks(); // Pobieramy wszystkie testy
+  
   const navigation = useNavigation();
   const resetTerms = async () => {
     try {
@@ -21,18 +20,49 @@ export function Home() {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Home Page" />
+      
+      <Header title="Home Page"/>
 
       <ScrollView style={styles.contentContainer}>
-        {tasks.map((task) => (
-          <View key={task.id} style={styles.testContainer}>
-            <Text style={styles.testTitle}>{task.title}</Text>
-            <Text style={styles.testDescription}>{task.description}</Text>
-            <TouchableOpacity>
-              <Text style={styles.testDescription}>Rozpocznij test</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
+        <View style={styles.testContainer}>
+          <Text style={styles.testTitle}>Title test #1</Text>
+          <Text style={styles.testDescription}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque.
+          </Text>
+          <Text style={styles.testDescription}>
+            Duis vulputate commodo lectus, ac blandit elit tincidunt id.
+          </Text>
+        </View>
+
+        <View style={styles.testContainer}>
+          <Text style={styles.testTitle}>Title test #2</Text>
+          <Text style={styles.testDescription}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque.
+          </Text>
+          <Text style={styles.testDescription}>
+            Duis vulputate commodo lectus, ac blandit elit tincidunt id.
+          </Text>
+        </View>
+
+        <View style={styles.testContainer}>
+          <Text style={styles.testTitle}>Title test #3</Text>
+          <Text style={styles.testDescription}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque.
+          </Text>
+          <Text style={styles.testDescription}>
+            Duis vulputate commodo lectus, ac blandit elit tincidunt id.
+          </Text>
+        </View>
+
+        <View style={styles.testContainer}>
+          <Text style={styles.testTitle}>Title test #4</Text>
+          <Text style={styles.testDescription}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque.
+          </Text>
+          <Text style={styles.testDescription}>
+            Duis vulputate commodo lectus, ac blandit elit tincidunt id.
+          </Text>
+        </View>
       </ScrollView>
 
       <View style={styles.footer}>

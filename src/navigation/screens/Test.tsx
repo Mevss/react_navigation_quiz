@@ -19,9 +19,6 @@ export function Test() {
         <Text style={testStyles.questionText}>
           This is some example of a long question to fill the content?
         </Text>
-        <Text style={testStyles.questionSubText}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque.
-        </Text>
 
         <View style={testStyles.answerContainer}>
           <View style={testStyles.answerRow}>
@@ -79,8 +76,6 @@ const testStyles = StyleSheet.create({
   questionText: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 8,
-
   },
   questionSubText: {
     fontSize: 14,
@@ -89,7 +84,7 @@ const testStyles = StyleSheet.create({
   answerContainer: {
     flex: 1,
     justifyContent: 'center',
-    marginBottom: 32,
+    marginBottom: 64,
   },
   answerRow: {
     flexDirection: 'row',

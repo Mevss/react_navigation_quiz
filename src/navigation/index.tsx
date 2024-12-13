@@ -9,11 +9,9 @@ import { Image } from 'react-native';
 import bell from '../assets/bell.png';
 import newspaper from '../assets/newspaper.png';
 import { Home } from './screens/Home';
-import { Profile } from './screens/Profile';
-import { Settings } from './screens/Settings';
-import { Updates } from './screens/Updates';
-import { NotFound } from './screens/NotFound';
 import { Test } from './screens/Test';
+import { Test2 } from './screens/Test2';
+import { Test3 } from './screens/Test3';
 import { Result } from './screens/Result';
 import './screens/gesture-handler';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -42,7 +40,20 @@ const RootStack = createDrawerNavigator({
         headerShown: false,
       },
     },
-
+    Test2: {
+      screen: Test2,
+      options: {
+        title: 'Test2',
+        headerShown: false,
+      },
+    },
+    Test3: {
+      screen: Test3,
+      options: {
+        title: 'Test3',
+        headerShown: false,
+      },
+    },
   },
   // initialRouteName: 'Result',
 });
