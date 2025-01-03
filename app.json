@@ -31,6 +31,19 @@
           "image": "./assets/bell.png"
         }
       ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            {
+              "asset": "./assets/fonts/PoppinsMedium.ttf"
+            },
+            {
+              "asset": "./assets/fonts/RobotoMedium.ttf"
+            }
+          ]
+        }
+      ],
       "react-native-edge-to-edge"
     ]
   }

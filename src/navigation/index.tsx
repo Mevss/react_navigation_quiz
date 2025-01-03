@@ -5,17 +5,99 @@ import {
   StaticParamList,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Image } from 'react-native';
+import { Image, TouchableOpacity, View, Alert } from 'react-native';
+import { useState, useEffect } from 'react';
 import bell from '../assets/bell.png';
 import newspaper from '../assets/newspaper.png';
 import { Home } from './screens/Home';
 import { Test } from './screens/Test';
-import { Test2 } from './screens/Test2';
-import { Test3 } from './screens/Test3';
 import { Result } from './screens/Result';
+import { TermsScreen } from './screens/TermsScreen';
 import './screens/gesture-handler';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { fetchAndStoreTests, Test as TestType } from './screens/Tasks';
+import _ from 'lodash';
+
+const CustomDrawerContent = (props: any) => {
+  const [tests, setTests] = useState<TestType[]>([]);
+
+  useEffect(() => {
+    loadTests();
+  }, []);
+
+  const loadTests = async () => {
+    try {
+      const fetchedTests = await fetchAndStoreTests();
+      setTests(fetchedTests);
+    } catch (error) {
+      console.error('Error loading tests:', error);
+    }
+  };
+
+  const handleSyncTests = async () => {
+    try {
+      const tests = await fetchAndStoreTests();
+      setTests(tests);
+      Alert.alert(
+        'Success',
+        `Successfully synchronized ${tests.length} tests`,
+        [{ text: 'OK' }]
+      );
+    } catch (error) {
+      Alert.alert(
+        'Error',
+        'Failed to synchronize tests. Please check your internet connection.',
+        [{ text: 'OK' }]
+      );
+    }
+  };
+
+  const handleRandomTest = () => {
+    if (tests.length > 0) {
+      const randomTest = tests[Math.floor(Math.random() * tests.length)];
+      props.navigation.navigate('Test', { testId: randomTest.id });
+    }
+  };
+
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      
+      <DrawerItem
+        label="Sync Tests"
+        onPress={handleSyncTests}
+        icon={({ color, size }) => (
+          <Image 
+            source={bell} 
+            style={{ width: size, height: size, tintColor: color }}
+          />
+        )}
+      />
+
+      <DrawerItem
+        label="Random Test"
+        onPress={handleRandomTest}
+        icon={({ color, size }) => (
+          <Image 
+            source={newspaper} 
+            style={{ width: size, height: size, tintColor: color }}
+          />
+        )}
+      />
+
+      <View style={{ height: 1, backgroundColor: '#e0e0e0', marginVertical: 10 }} />
+
+      {tests.map((test) => (
+        <DrawerItem
+          key={test.id}
+          label={test.name}
+          onPress={() => props.navigation.navigate('Test', { testId: test.id })}
+        />
+      ))}
+    </DrawerContentScrollView>
+  );
+};
 
 const RootStack = createDrawerNavigator({
   screens: {
@@ -40,26 +122,25 @@ const RootStack = createDrawerNavigator({
         headerShown: false,
       },
     },
-    Test2: {
-      screen: Test2,
+    TermsScreen: {
+      screen: TermsScreen,
       options: {
-        title: 'Test2',
-        headerShown: false,
-      },
-    },
-    Test3: {
-      screen: Test3,
-      options: {
-        title: 'Test3',
+        title: 'TermsScreen',
         headerShown: false,
       },
     },
   },
-  // initialRouteName: 'Result',
+  drawerContent: (props) => <CustomDrawerContent {...props} />,
 });
+
 export const Navigation = createStaticNavigation(RootStack);
 
-type RootStackParamList = StaticParamList<typeof RootStack>;
+type RootStackParamList = {
+  Home: undefined;
+  Result: undefined;
+  Test: { testId: string };
+  TermsScreen: undefined;
+};
 
 declare global {
   namespace ReactNavigation {

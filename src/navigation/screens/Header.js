@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'PoppinsMedium',
     textAlign: 'center',
     flex: 1,
   },
