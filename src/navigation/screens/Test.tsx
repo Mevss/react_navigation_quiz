@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Alert, TouchableOpacity, ActivityIndicator } fr
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from './Header';
 import { fetchAndStoreTestDetails } from './Tasks';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useRoute, useNavigation, useFocusEffect } from '@react-navigation/native';
 import type { Test, Question } from './Tasks';
 import _ from 'lodash';
 
@@ -22,38 +22,53 @@ export function Test() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  // Resetowanie detali
+  const resetState = () => {
     setCurrentQuestionIndex(0);
     setSelectedAnswer(null);
     setScore(0);
     setProgress(100);
     setTimeLeft(30);
     setIsTimerActive(true);
+    setTest(undefined);
+    setQuestions([]);
     setLoading(true);
+  };
+
+  // Ladowanie testu
+  useFocusEffect(
+    React.useCallback(() => {
+      resetState();
+      
+      const loadTest = async () => {
+        if (testId) {
+          try {
+            const testData = await fetchAndStoreTestDetails(testId);
+            setTest(testData);
     
-    const loadTest = async () => {
-      if (testId) {
-        try {
-          const testData = await fetchAndStoreTestDetails(testId);
-          setTest(testData);
-  
-          // Losowanie kolejności pytań
-          const testQuestions = _.shuffle(testData.tasks || []);
-          setQuestions(testQuestions);
-  
-          if (testQuestions.length > 0) {
-            setTimeLeft(testQuestions[0].duration);
+            const testQuestions = _.shuffle(testData.tasks || []);
+            setQuestions(testQuestions);
+    
+            if (testQuestions.length > 0) {
+              setTimeLeft(testQuestions[0].duration);
+            }
+          } catch (error) {
+            Alert.alert('Błąd', 'Nie udało się załadować testu');
+            navigation.goBack();
+          } finally {
+            setLoading(false);
           }
-        } catch (error) {
-          Alert.alert('Błąd', 'Nie udało się załadować testu');
-          navigation.goBack();
-        } finally {
-          setLoading(false);
         }
-      }
-    };
-    loadTest();
-  }, [testId]);
+      };
+      
+      loadTest();
+
+      // Usuwanie przy utraceniu focus
+      return () => {
+        resetState();
+      };
+    }, [testId])
+  );
 
   useEffect(() => {
     if (!test || !isTimerActive) return;
@@ -71,6 +86,7 @@ export function Test() {
     return () => clearInterval(interval);
   }, [timeLeft, isTimerActive, test]);
 
+  // Zaznaczanie odpowiedzi przy upłynięciu czasu
   const handleTimeUp = () => {
     setSelectedAnswer(null);
     if (currentQuestionIndex + 1 < questions.length) {
@@ -90,15 +106,23 @@ export function Test() {
     setIsTimerActive(true);
   };
 
+  // Ukończenie testu i reset
   const handleTestCompletion = (finalScore: number, totalQuestions: number) => {
     setIsTimerActive(false);
     Alert.alert(
       "Test zakończony!",
       `Twój wynik: ${finalScore} z ${totalQuestions} pytań`,
-      [{ text: "OK", onPress: () => navigation.navigate('Home') }]
+      [{ 
+        text: "OK", 
+        onPress: () => {
+          resetState();
+          navigation.navigate('Home');
+        }
+      }]
     );
   };
 
+  // Wysłanie wyników
   const submitResults = async (finalScore: number, totalQuestions: number) => {
     try {
       const response = await fetch('https://tgryl.pl/quiz/result', {
@@ -121,6 +145,7 @@ export function Test() {
     }
   };
 
+  // Logika do wybierania odpowiedzi
   useEffect(() => {
     if (selectedAnswer !== null && questions.length > 0) {
       const currentQuestion = questions[currentQuestionIndex];
@@ -142,6 +167,15 @@ export function Test() {
       }, 1000);
     }
   }, [selectedAnswer]);
+
+  // Nasluchiwanie do nawigacji aby resetowac
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', () => {
+      resetState();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   if (loading || !test || questions.length === 0) {
     return (
@@ -194,7 +228,6 @@ export function Test() {
     </SafeAreaView>
   );
 }
-
 const testStyles = StyleSheet.create({
   container: {
     flex: 1,

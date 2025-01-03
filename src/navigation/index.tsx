@@ -31,7 +31,7 @@ const CustomDrawerContent = (props: any) => {
       const fetchedTests = await fetchAndStoreTests();
       setTests(fetchedTests);
     } catch (error) {
-      console.error('Error loading tests:', error);
+      console.error('Blad podczas ladowania testow:', error);
     }
   };
 
@@ -40,14 +40,14 @@ const CustomDrawerContent = (props: any) => {
       const tests = await fetchAndStoreTests();
       setTests(tests);
       Alert.alert(
-        'Success',
-        `Successfully synchronized ${tests.length} tests`,
+        'Sukces',
+        `Zsynchronizowano ${tests.length} testow`,
         [{ text: 'OK' }]
       );
     } catch (error) {
       Alert.alert(
-        'Error',
-        'Failed to synchronize tests. Please check your internet connection.',
+        'Blad',
+        'Nie udalo sie zsynchronizowac testow.',
         [{ text: 'OK' }]
       );
     }
@@ -122,13 +122,13 @@ const RootStack = createDrawerNavigator({
         headerShown: false,
       },
     },
-    TermsScreen: {
-      screen: TermsScreen,
-      options: {
-        title: 'TermsScreen',
-        headerShown: false,
-      },
-    },
+    // TermsScreen: {
+    //   screen: TermsScreen,
+    //   options: {
+    //     title: 'TermsScreen',
+    //     headerShown: false,
+    //   },
+    // },
   },
   drawerContent: (props) => <CustomDrawerContent {...props} />,
 });

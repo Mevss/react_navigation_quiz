@@ -22,7 +22,7 @@ export function Result() {
       const data = await response.json();
       setResults(data);
     } catch (error) {
-      console.error('Error fetching results:', error);
+      console.error('Error: ', error);
     }
   };
 
@@ -35,7 +35,7 @@ export function Result() {
     await fetchResults();
     setRefreshing(false);
   };
-
+  // Formatowanie daty
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString();

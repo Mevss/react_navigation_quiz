@@ -20,12 +20,12 @@ export function App() {
           PoppinsMedium: require('../assets/fonts/PoppinsMedium.ttf'),
           RobotoMedium: require('../assets/fonts/RobotoMedium.ttf'),
         }).catch(error => {
-          console.error('Error loading fonts:', error);
+          console.error('Blad w ladowaniu fontow:', error);
         });
         // Sprawdzanie połączenia
         fetch().then(state => {
-          console.log("Connection type", state.type);
-          console.log("Is connected?", state.isConnected);
+          console.log("Typ polaczenia", state.type);
+          console.log("Polaczony?", state.isConnected);
         });
         
         await Asset.loadAsync([

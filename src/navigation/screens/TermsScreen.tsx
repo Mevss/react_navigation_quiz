@@ -11,11 +11,11 @@ export function TermsScreen({ setHasSeenTerms, onAcceptTerms }: TermsScreenProps
   const acceptTerms = async () => {
     try {
       await AsyncStorage.setItem('hasSeenTerms', 'true');
-      console.log('Terms accepted and stored');
-      setHasSeenTerms(true);
-      onAcceptTerms();
+      console.log('Warunki zaakceptowane');
+      // setHasSeenTerms(true);
+      // onAcceptTerms();
     } catch (error) {
-      console.error('Error saving terms acceptance:', error);
+      console.error('Error :', error);
     }
   };
 
